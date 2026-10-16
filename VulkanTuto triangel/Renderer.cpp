@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <limits>
 #include <algorithm>
-
+#include <fstream>
 
 void Renderer::CreatInstance()
 {
@@ -83,6 +83,8 @@ void Renderer::pickPhysicalDevice()
 	}
 	physicalDevice = *devIter;
 }
+
+
 
 // get the required extensions for the instance, including the debug utils extension if debugging is enabled, and the GLFW required extensions for window surface creation.
 std::vector<const char*> Renderer::GetRequiredExtension()
@@ -251,7 +253,6 @@ void Renderer::createSwapChain() {
 
 vk::SurfaceFormatKHR Renderer::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats)
 {
-
 	const auto formatIt = std::ranges::find_if(
 		availableFormats,
 		[](const auto& format) { return format.format == vk::Format::eB8G8R8A8Srgb && format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear; });
@@ -314,8 +315,6 @@ void Renderer::createGraphicsPipeline()
 {
 
 }
-
-
 /// <summary>
 
 void Renderer::createLogicalDevice()

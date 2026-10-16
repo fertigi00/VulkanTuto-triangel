@@ -23,7 +23,8 @@ private:
 	vk::raii::Queue graphicsQueue = nullptr;
 	vk::raii::SurfaceKHR surface = nullptr;
 	vk::raii::SwapchainKHR swapChain = nullptr;
-	
+	vk::raii::ShaderModule createShaderModule(const std::vector<char>& code) const;
+
 	vk::PhysicalDeviceFeatures deviceFeatures;
 	std::vector<vk::PresentModeKHR> availablePresentModes = physicalDevice.getSurfacePresentModesKHR(*surface);
 	GLFWwindow* window = nullptr;
