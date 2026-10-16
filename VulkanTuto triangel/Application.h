@@ -2,6 +2,7 @@
 
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
+#include "Renderer.h"
 //#include "vulkan/vulkan.hpp"
 //#include <vulkan/vulkan_raii.hpp>
 
@@ -19,6 +20,7 @@ public:
 	int heitght = 600;
 
 	GLFWwindow* window = nullptr;
+	Renderer *renderer = nullptr;
 
 	void Init();
 	void Run();

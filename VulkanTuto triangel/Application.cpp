@@ -33,7 +33,12 @@ void Application::InitWindow()
 
 void Application::InitVulkan()
 {
+	renderer = new Renderer();
 
+	renderer->SetWindow(window);
+
+	renderer->CreatInstance();
+    renderer->CreateSurface();
 }
 
 void Application::DestroyWindow()
