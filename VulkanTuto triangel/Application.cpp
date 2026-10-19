@@ -10,8 +10,9 @@ void Application::Run()
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
-
+        renderer->drawFrame();
     }
+    renderer->device.waitIdle();
 }
 
 void Application::Destroy() //destroy inver de init
@@ -29,6 +30,7 @@ void Application::InitWindow()
 
 
     window = glfwCreateWindow(800, 600, "VulkanTUTO:)", nullptr, nullptr);
+    
 }
 
 void Application::InitVulkan()
@@ -39,6 +41,14 @@ void Application::InitVulkan()
 
 	renderer->CreatInstance();
     renderer->CreateSurface();
+    renderer->pickPhysicalDevice();
+    renderer->createLogicalDevice();
+    renderer->createSwapChain();
+    renderer->createImageViews();
+    renderer->createGraphicsPipeline();
+    renderer->createCommandPool();
+    renderer->createCommandBuffer();
+    renderer->createSyncObjects();
 }
 
 void Application::DestroyWindow()

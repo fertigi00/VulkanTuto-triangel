@@ -11,7 +11,7 @@
 /// controle D duplkique  et shift pour deléctrioner
 /// muticurser : alt souri er tu peux taper sur plusier lige en mame temp
 /// Alt entrée sur les void pour les maitre facilemant dans .cpp
-/// </summary>
+/// </summary>  RenderDoc site web : https://renderdoc.org/docs/index.html
 /// 
 class Application
 {
