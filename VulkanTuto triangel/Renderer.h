@@ -34,7 +34,6 @@ private:
 	vk::raii::PipelineLayout pipelineLayout = nullptr;
 	vk::raii::Pipeline graphicsPipeline = nullptr;
 	vk::raii::CommandPool commandPool = nullptr;
-	vk::raii::CommandBuffer commandBuffer = nullptr;
 	vk::raii::Semaphore presentCompleteSemaphore = nullptr;
 	vk::raii::Semaphore renderFinishedSemaphore = nullptr;
 	vk::raii::Fence drawFence = nullptr;
@@ -48,13 +47,18 @@ private:
 	std::vector<const char*>GetRequiredExtension();
 	std::vector<const char*>GetRequiredLayers();
 	std::vector<const char*>GetRequiredSwapchainExtension();
-
+	std::vector<vk::raii::CommandBuffer> commandBuffers;
 	std::vector<vk::raii::ImageView> swapChainImageViews;
+	std::vector<vk::raii::Semaphore> presentCompleteSemaphores;
+	std::vector<vk::raii::Semaphore> renderFinishedSemaphores;
+	std::vector<vk::raii::Fence> inFlightFences;
 	std::vector<vk::Image> swapChainImages;
 
+	uint32_t frameIndex = 0;
 	vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
 	vk::PresentModeKHR chooseSwapPresentMode(std::vector<vk::PresentModeKHR> const& availablePresentModes);
 	uint32_t chooseSwapMinImageCount(vk::SurfaceCapabilitiesKHR const& surfaceCapabilities);
+
 	vk::Extent2D chooseSwapExtent(vk::SurfaceCapabilitiesKHR const& capabilities);
 	vk::SurfaceFormatKHR swapChainSurfaceFormat;
 	vk::Extent2D swapChainExtent;

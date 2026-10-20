@@ -52,10 +52,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.slang">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="compile.bat">
+    <None Include="shaders\slang.spv" />
+    <None Include="shaders\shader.slang" />
+    <None Include="shaders\compile.bat">
       <Filter>Fichiers sources</Filter>
     </None>
   </ItemGroup>

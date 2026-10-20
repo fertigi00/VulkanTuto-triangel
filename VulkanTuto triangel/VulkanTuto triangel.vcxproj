@@ -165,8 +165,9 @@
     <ClInclude Include="swap_chain.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="compile.bat" />
-    <None Include="shader.slang" />
+    <None Include="shaders\compile.bat" />
+    <None Include="shaders\shader.slang" />
+    <None Include="shaders\slang.spv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
