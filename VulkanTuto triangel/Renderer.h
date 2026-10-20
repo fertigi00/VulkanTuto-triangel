@@ -28,8 +28,6 @@ private:
 	vk::raii::Instance instance = nullptr;
 	vk::raii::DebugUtilsMessengerEXT debugMessenger = nullptr;
 	vk::raii::PhysicalDevice physicalDevice = nullptr;
-	
-	vk::raii::Queue graphicsQueue = nullptr;
 	vk::raii::SurfaceKHR surface = nullptr;
 	vk::raii::SwapchainKHR swapChain = nullptr;
 	vk::raii::ShaderModule createShaderModule(const std::vector<char>& code) const;
@@ -44,7 +42,7 @@ private:
 	vk::raii::Queue queue = nullptr;
 
 	vk::PhysicalDeviceFeatures deviceFeatures;
-	std::vector<vk::PresentModeKHR> availablePresentModes = physicalDevice.getSurfacePresentModesKHR(*surface);
+	
 	GLFWwindow* window = nullptr;
 
 	std::vector<const char*>GetRequiredExtension();
