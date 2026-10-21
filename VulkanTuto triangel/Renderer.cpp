@@ -11,6 +11,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <array>
 #include <chrono>
+#define STB_IMAGE_IMPLEMENTATION
+//#include <stb_image.h>  /// ne marche pas 
+
 
 constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 //VerVertex input description
@@ -422,6 +425,12 @@ void Renderer::createCommandPool()
 	vk::CommandPoolCreateInfo poolInfo{ .flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer,
 								   .queueFamilyIndex = queueIndex };
 	commandPool = vk::raii::CommandPool(device, poolInfo);
+}
+
+void Renderer::createTextureImage()
+{
+
+
 }
 
 void Renderer::createCommandBuffer()

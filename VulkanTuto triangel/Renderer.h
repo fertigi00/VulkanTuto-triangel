@@ -4,6 +4,7 @@
 #include "GLFW/glfw3.h"
 #include"vulkan/vulkan_raii.hpp"
 
+
 class Renderer
 {
 public:
@@ -19,6 +20,7 @@ public:
 	void createDescriptorSetLayout();
 	void createGraphicsPipeline();
 	void createCommandPool();
+	void createTextureImage();
 	void createCommandBuffer();
 	void drawFrame();
 	void createSyncObjects();
