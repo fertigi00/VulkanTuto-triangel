@@ -442,6 +442,9 @@ void Renderer::createCommandBuffer()
 void Renderer::recordCommandBuffer(uint32_t imageIndex)
 {
 	auto& commandBuffer = commandBuffers[frameIndex];
+	commandBuffer.begin(
+        vk::CommandBufferBeginInfo{}
+    );
 	transition_image_layout(
 		imageIndex,
 		vk::ImageLayout::eUndefined,
@@ -465,15 +468,49 @@ void Renderer::recordCommandBuffer(uint32_t imageIndex)
 	.colorAttachmentCount = 1,
 	.pColorAttachments = &attachmentInfo };
 	commandBuffer.beginRendering(renderingInfo);
-	commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, *graphicsPipeline);
-	commandBuffer.setViewport(0, vk::Viewport(0.0f, static_cast<float>(swapChainExtent.height), static_cast<float>(swapChainExtent.width), -static_cast<float>(swapChainExtent.height), 0.0f, 1.0f));
-	commandBuffer.setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), swapChainExtent));
+
+	commandBuffer.bindPipeline(
+		vk::PipelineBindPoint::eGraphics,
+		*graphicsPipeline
+	);
+
+	commandBuffer.setViewport(
+		0,
+		vk::Viewport(
+			0.0f,
+			static_cast<float>(swapChainExtent.height),
+			static_cast<float>(swapChainExtent.width),
+			-static_cast<float>(swapChainExtent.height),
+			0.0f,
+			1.0f
+		)
+	);
+
+	commandBuffer.setScissor(
+		0,
+		vk::Rect2D(vk::Offset2D(0, 0), swapChainExtent)
+	);
+
 	commandBuffer.bindVertexBuffers(0, *vertexBuffer, { 0 });
-	commandBuffer.draw(static_cast<uint32_t>(vertices.size()), 1, 0, 0);
-	commandBuffers[frameIndex].bindVertexBuffers(0, *vertexBuffer, { 0 });
-	commandBuffers[frameIndex].bindIndexBuffer(*indexBuffer, 0, vk::IndexType::eUint16);
-	commandBuffers[frameIndex].bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, *descriptorSets[frameIndex], nullptr);
-	commandBuffer.drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+
+	commandBuffer.bindIndexBuffer(
+		*indexBuffer,
+		0,
+		vk::IndexType::eUint16
+	);
+
+	commandBuffer.bindDescriptorSets(
+		vk::PipelineBindPoint::eGraphics,
+		*pipelineLayout,
+		0,
+		*descriptorSets[frameIndex],
+		{}
+	);
+
+	commandBuffer.drawIndexed(
+		static_cast<uint32_t>(indices.size()),
+		1, 0, 0, 0
+	);
 
 	commandBuffer.endRendering();
 	transition_image_layout(
