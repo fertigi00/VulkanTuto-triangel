@@ -48,12 +48,16 @@ void Application::InitVulkan()
     renderer->createLogicalDevice();
     renderer->createSwapChain();
     renderer->createImageViews();
+	renderer->createDescriptorSetLayout();
     renderer->createGraphicsPipeline();
     renderer->createCommandPool();
     renderer->createCommandBuffer();
     renderer->createSyncObjects();
 	renderer->createVertexBuffer();
 	renderer->createIndexBuffer();
+	renderer->createUniformBuffers();
+	renderer->createDescriptorPool();
+    renderer->createDescriptorSets();
 }
 
 void Application::DestroyWindow()
