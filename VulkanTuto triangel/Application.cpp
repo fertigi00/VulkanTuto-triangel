@@ -31,8 +31,10 @@ void Application::InitWindow()
 
 
     window = glfwCreateWindow(800, 600, "VulkanTUTO:)", nullptr, nullptr);
+    glfwSetFramebufferSizeCallback(window, renderer->framebufferResizeCallback);
     
 }
+
 
 void Application::InitVulkan()
 {
@@ -50,6 +52,7 @@ void Application::InitVulkan()
     renderer->createCommandPool();
     renderer->createCommandBuffer();
     renderer->createSyncObjects();
+	renderer->createVertexBuffer();
 }
 
 void Application::DestroyWindow()

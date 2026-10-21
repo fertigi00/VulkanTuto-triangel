@@ -4,7 +4,6 @@
 #include "GLFW/glfw3.h"
 #include"vulkan/vulkan_raii.hpp"
 
-
 class Renderer
 {
 public:
@@ -22,7 +21,11 @@ public:
 	void createCommandBuffer();
 	void drawFrame();
 	void createSyncObjects();
+	void createVertexBuffer();
 	vk::raii::Device device = nullptr;
+	bool framebufferResized = false;
+	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+
 private:
 	vk::raii::Context context;
 	vk::raii::Instance instance = nullptr;
@@ -40,10 +43,15 @@ private:
 	uint32_t queueIndex = ~0;
 	vk::raii::Queue queue = nullptr;
 
+	vk::raii::Buffer vertexBuffer = nullptr;
+	vk::raii::DeviceMemory vertexBufferMemory = nullptr;
+
 	vk::PhysicalDeviceFeatures deviceFeatures;
 	
 	GLFWwindow* window = nullptr;
-
+	void recreateSwapChain();
+	void cleanupSwapChain();
+	void cleanup();
 	std::vector<const char*>GetRequiredExtension();
 	std::vector<const char*>GetRequiredLayers();
 	std::vector<const char*>GetRequiredSwapchainExtension();
@@ -58,6 +66,8 @@ private:
 	vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
 	vk::PresentModeKHR chooseSwapPresentMode(std::vector<vk::PresentModeKHR> const& availablePresentModes);
 	uint32_t chooseSwapMinImageCount(vk::SurfaceCapabilitiesKHR const& surfaceCapabilities);
+	uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties);
+	
 
 	vk::Extent2D chooseSwapExtent(vk::SurfaceCapabilitiesKHR const& capabilities);
 	vk::SurfaceFormatKHR swapChainSurfaceFormat;
@@ -69,6 +79,4 @@ private:
 	
 	static VKAPI_ATTR vk::Bool32 VKAPI_CALL DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT, vk::DebugUtilsMessageTypeFlagsEXT, const vk::DebugUtilsMessengerCallbackDataEXT*, void*);
 
-
 };
-

@@ -34,7 +34,5 @@ private:
 	void DestroyWindow();
 	void DestroyVulkan();
 
-
-
 };
 
