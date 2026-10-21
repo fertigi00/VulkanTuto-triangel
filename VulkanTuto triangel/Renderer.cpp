@@ -30,9 +30,14 @@ struct Vertex
 };
 
 const std::vector<Vertex> vertices = {
-	{{0.0f, -0.5f}, {0.0f, 0.0f, 1.0f}},
-	{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-	{{-0.5f, 0.5f}, {1.0f, 1.0f, 0.0f}}
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+	{{-0.5f, 0.5f}, {0.0f, 1.0f, 1.0f}}
+};
+
+const std::vector<uint16_t> indices = {
+	0, 1, 2, 2, 3, 0
 };
 
 void Renderer::CreatInstance()
@@ -437,6 +442,9 @@ void Renderer::recordCommandBuffer(uint32_t imageIndex)
 	commandBuffer.setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), swapChainExtent));
 	commandBuffer.bindVertexBuffers(0, *vertexBuffer, { 0 });
 	commandBuffer.draw(static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+	commandBuffers[frameIndex].bindVertexBuffers(0, *vertexBuffer, { 0 });
+	commandBuffers[frameIndex].bindIndexBuffer(*indexBuffer, 0, vk::IndexType::eUint16);
+	commandBuffer.drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
 	commandBuffer.endRendering();
 	transition_image_layout(
@@ -602,23 +610,60 @@ void Renderer::framebufferResizeCallback(GLFWwindow* window, int width, int heig
 
 void Renderer::createVertexBuffer()
 {
-	
-	vk::BufferCreateInfo bufferInfo{ .size = sizeof(vertices[0]) * vertices.size(),
-		.usage = vk::BufferUsageFlagBits::eVertexBuffer,
-		.sharingMode = vk::SharingMode::eExclusive };
-	vertexBuffer = vk::raii::Buffer(device, bufferInfo);
+	vk::DeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
-	vk::MemoryRequirements memRequirements = vertexBuffer.getMemoryRequirements();
-	vk::MemoryAllocateInfo memoryAllocateInfo{
-		.allocationSize = memRequirements.size,
-		.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent) };
-	vertexBufferMemory = vk::raii::DeviceMemory(device, memoryAllocateInfo);
+	auto [stagingBuffer, stagingBufferMemory] =
+		createBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 
-	vertexBuffer.bindMemory(*vertexBufferMemory, 0);
+	void* dataStaging = stagingBufferMemory.mapMemory(0, bufferSize);
+	memcpy(dataStaging, vertices.data(), bufferSize);
+	stagingBufferMemory.unmapMemory();
 
-	void* data = vertexBufferMemory.mapMemory(0, bufferInfo.size);
-	memcpy(data, vertices.data(), bufferInfo.size);
-	vertexBufferMemory.unmapMemory();
+	std::tie(vertexBuffer, vertexBufferMemory) =
+		createBuffer(bufferSize, vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eTransferDst, vk::MemoryPropertyFlagBits::eDeviceLocal);
+
+	copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+}
+
+void Renderer::createIndexBuffer()
+{
+	vk::DeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+
+	auto [stagingBuffer, stagingBufferMemory] =
+		createBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+
+	void* data = stagingBufferMemory.mapMemory(0, bufferSize);
+	memcpy(data, indices.data(), (size_t)bufferSize);
+	stagingBufferMemory.unmapMemory();
+
+	std::tie(indexBuffer, indexBufferMemory) =
+		createBuffer(bufferSize, vk::BufferUsageFlagBits::eIndexBuffer | vk::BufferUsageFlagBits::eTransferDst, vk::MemoryPropertyFlagBits::eDeviceLocal);
+
+	copyBuffer(stagingBuffer, indexBuffer, bufferSize);
+}
+
+std::pair<vk::raii::Buffer, vk::raii::DeviceMemory>Renderer::createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties)
+{
+	vk::BufferCreateInfo   bufferInfo{ .size = size, .usage = usage, .sharingMode = vk::SharingMode::eExclusive };
+	vk::raii::Buffer       buffer = vk::raii::Buffer(device, bufferInfo);
+	vk::MemoryRequirements memRequirements = buffer.getMemoryRequirements();
+	vk::MemoryAllocateInfo allocInfo{ .allocationSize = memRequirements.size, .memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties) };
+	vk::raii::DeviceMemory bufferMemory = vk::raii::DeviceMemory(device, allocInfo);
+	buffer.bindMemory(*bufferMemory, 0);
+	return { std::move(buffer), std::move(bufferMemory) };
+}
+
+void Renderer::copyBuffer(vk::raii::Buffer& srcBuffer, vk::raii::Buffer& dstBuffer, vk::DeviceSize size)
+{
+	vk::CommandBufferAllocateInfo allocInfo{ .commandPool = commandPool, .level = vk::CommandBufferLevel::ePrimary, .commandBufferCount = 1 };
+	vk::raii::CommandBuffer commandCopyBuffer = std::move(device.allocateCommandBuffers(allocInfo).front());
+
+	commandCopyBuffer.begin({ .flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit });
+	commandCopyBuffer.copyBuffer(*srcBuffer, *dstBuffer, vk::BufferCopy(0, 0, size));
+	commandCopyBuffer.end();
+
+	queue.submit(vk::SubmitInfo{ .commandBufferCount = 1, .pCommandBuffers = &*commandCopyBuffer }, nullptr);
+	queue.waitIdle();
 }
 
 uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties)
@@ -634,6 +679,8 @@ uint32_t Renderer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags p
 	throw std::runtime_error("failed to find suitable memory type!");
 
 }
+//
+
 
 /// <summary>
 void Renderer::createLogicalDevice()

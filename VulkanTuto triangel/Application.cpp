@@ -53,6 +53,7 @@ void Application::InitVulkan()
     renderer->createCommandBuffer();
     renderer->createSyncObjects();
 	renderer->createVertexBuffer();
+	renderer->createIndexBuffer();
 }
 
 void Application::DestroyWindow()

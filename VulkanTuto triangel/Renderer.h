@@ -22,6 +22,7 @@ public:
 	void drawFrame();
 	void createSyncObjects();
 	void createVertexBuffer();
+	void createIndexBuffer();
 	vk::raii::Device device = nullptr;
 	bool framebufferResized = false;
 	static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
@@ -45,6 +46,8 @@ private:
 
 	vk::raii::Buffer vertexBuffer = nullptr;
 	vk::raii::DeviceMemory vertexBufferMemory = nullptr;
+	vk::raii::Buffer       indexBuffer = nullptr;
+	vk::raii::DeviceMemory indexBufferMemory = nullptr;
 
 	vk::PhysicalDeviceFeatures deviceFeatures;
 	
@@ -61,7 +64,8 @@ private:
 	std::vector<vk::raii::Semaphore> renderFinishedSemaphores;
 	std::vector<vk::raii::Fence> inFlightFences;
 	std::vector<vk::Image> swapChainImages;
-
+	std::pair<vk::raii::Buffer, vk::raii::DeviceMemory>createBuffer(vk::DeviceSize size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties);
+	void copyBuffer(vk::raii::Buffer& srcBuffer, vk::raii::Buffer& dstBuffer, vk::DeviceSize size);
 	uint32_t frameIndex = 0;
 	vk::SurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats);
 	vk::PresentModeKHR chooseSwapPresentMode(std::vector<vk::PresentModeKHR> const& availablePresentModes);
