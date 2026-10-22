@@ -429,7 +429,20 @@ void Renderer::createCommandPool()
 
 void Renderer::createTextureImage()
 {
+	int texWidth, texHeight, texChannels;
+	stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	vk::DeviceSize imageSize = texWidth * texHeight * 4;
 
+	if (!pixels)
+	{
+		throw std::runtime_error("failed to load texture image!");
+	}
+	auto [stagingBuffer, stagingBufferMemory] =
+		createBuffer(imageSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);  ///not chure
+	void* data = stagingBufferMemory.mapMemory(0, imageSize);
+	memcpy(data, pixels, imageSize);
+	stagingBufferMemory.unmapMemory();
+	stbi_image_free(pixels);
 
 }
 

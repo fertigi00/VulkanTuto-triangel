@@ -60,6 +60,10 @@ private:
 	vk::raii::DescriptorPool descriptorPool = nullptr;
 	std::vector<vk::raii::DescriptorSet> descriptorSets;
 
+	vk::raii::Image        textureImage = nullptr;
+	vk::raii::DeviceMemory textureImageMemory = nullptr;
+
+
 	GLFWwindow* window = nullptr;
 	void recreateSwapChain();
 	void cleanupSwapChain();
