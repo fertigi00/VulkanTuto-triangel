@@ -52,6 +52,8 @@ void Application::InitVulkan()
     renderer->createGraphicsPipeline();
     renderer->createCommandPool();
     renderer->createTextureImage();
+    renderer->createTextureImageView();
+    renderer->createTextureSampler();
     renderer->createCommandBuffer();
     renderer->createSyncObjects();
 	renderer->createVertexBuffer();

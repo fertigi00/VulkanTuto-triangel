@@ -16,6 +16,9 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{f57c29cb-e9d9-4c6b-bed4-a89902f83d82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="textures">
+      <UniqueIdentifier>{09669cf1-d3d4-49e9-8604-eb551fcfb46c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VulkanTuto triangel.cpp">
@@ -57,5 +60,10 @@
     <None Include="shaders\compile.bat">
       <Filter>Fichiers sources</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\texture.jpg">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

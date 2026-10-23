@@ -21,6 +21,8 @@ public:
 	void createGraphicsPipeline();
 	void createCommandPool();
 	void createTextureImage();
+	void createTextureImageView();
+	void createTextureSampler();
 	void createCommandBuffer();
 	void drawFrame();
 	void createSyncObjects();
@@ -60,9 +62,12 @@ private:
 	vk::raii::DescriptorPool descriptorPool = nullptr;
 	std::vector<vk::raii::DescriptorSet> descriptorSets;
 
-	vk::raii::Image        textureImage = nullptr;
+	vk::raii::Image textureImage = nullptr;
 	vk::raii::DeviceMemory textureImageMemory = nullptr;
-
+	vk::raii::ImageView textureImageView = nullptr;
+	vk::raii::Sampler textureSampler = nullptr;
+	vk::raii::ImageView createImageView(vk::Image const& image, vk::Format format);
+	
 
 	GLFWwindow* window = nullptr;
 	void recreateSwapChain();
@@ -91,6 +96,10 @@ private:
 	uint32_t chooseSwapMinImageCount(vk::SurfaceCapabilitiesKHR const& surfaceCapabilities);
 	uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties);
 	
+	std::pair<vk::raii::Image, vk::raii::DeviceMemory>createImage(uint32_t width, uint32_t height,
+		vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties);
+	vk::raii::CommandBuffer beginSingleTimeCommands();
+
 
 	vk::Extent2D chooseSwapExtent(vk::SurfaceCapabilitiesKHR const& capabilities);
 	vk::SurfaceFormatKHR swapChainSurfaceFormat;
@@ -99,7 +108,10 @@ private:
 	void recordCommandBuffer(uint32_t imageIndex);
 	void transition_image_layout(uint32_t imageIndex, vk::ImageLayout old_layout, vk::ImageLayout new_layout, vk::AccessFlags2 src_access_mask, vk::AccessFlags2 dst_access_mask, vk::PipelineStageFlags2 src_stage_mask,
 		vk::PipelineStageFlags2 dst_stage_mask);
+	void transitionImageLayout(vk::raii::CommandBuffer& commandBuffer, const vk::raii::Image& image, vk::ImageLayout oldLayout, vk::ImageLayout newLayout);
+	void copyBufferToImage(vk::raii::CommandBuffer& commandBuffer, const vk::raii::Buffer& buffer, vk::raii::Image& image, uint32_t width, uint32_t height);
 	void updateUniformBuffer(uint32_t currentImage);
+	void endSingleTimeCommands(vk::raii::CommandBuffer&& commandBuffer);
 	
 	static VKAPI_ATTR vk::Bool32 VKAPI_CALL DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT, vk::DebugUtilsMessageTypeFlagsEXT, const vk::DebugUtilsMessengerCallbackDataEXT*, void*);
 
