@@ -20,6 +20,7 @@ public:
 	void createDescriptorSetLayout();
 	void createGraphicsPipeline();
 	void createCommandPool();
+	void createDepthResources();
 	void createTextureImage();
 	void createTextureImageView();
 	void createTextureSampler();
@@ -52,7 +53,7 @@ private:
 	vk::raii::Fence drawFence = nullptr;
 	uint32_t queueIndex = ~0;
 	vk::raii::Queue queue = nullptr;
-
+	//buffer and memory for vertex and index data
 	vk::raii::Buffer vertexBuffer = nullptr;
 	vk::raii::DeviceMemory vertexBufferMemory = nullptr;
 	vk::raii::Buffer       indexBuffer = nullptr;
@@ -61,19 +62,23 @@ private:
 	vk::PhysicalDeviceFeatures deviceFeatures;
 	vk::raii::DescriptorPool descriptorPool = nullptr;
 	std::vector<vk::raii::DescriptorSet> descriptorSets;
+	// Texture image and sampler
 
 	vk::raii::Image textureImage = nullptr;
 	vk::raii::DeviceMemory textureImageMemory = nullptr;
 	vk::raii::ImageView textureImageView = nullptr;
 	vk::raii::Sampler textureSampler = nullptr;
-	vk::raii::ImageView createImageView(vk::Image const& image, vk::Format format);
-	
+	vk::raii::ImageView createImageView(vk::Image const& image, vk::Format format, vk::ImageAspectFlags aspectFlags);
+	vk::raii::Image depthImage = nullptr;
+	vk::raii::DeviceMemory depthImageMemory = nullptr;
+	vk::raii::ImageView depthImageView = nullptr;
 
 	GLFWwindow* window = nullptr;
 	void recreateSwapChain();
 	void cleanupSwapChain();
 	void cleanup();
 
+	// Swap chain and related resources
 	std::vector<const char*>GetRequiredExtension();
 	std::vector<const char*>GetRequiredLayers();
 	std::vector<const char*>GetRequiredSwapchainExtension();
@@ -99,6 +104,9 @@ private:
 	std::pair<vk::raii::Image, vk::raii::DeviceMemory>createImage(uint32_t width, uint32_t height,
 		vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties);
 	vk::raii::CommandBuffer beginSingleTimeCommands();
+	//Formats deep
+	vk::Format findSupportedFormat(const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features);
+	vk::Format findDepthFormat();
 
 
 	vk::Extent2D chooseSwapExtent(vk::SurfaceCapabilitiesKHR const& capabilities);
@@ -106,8 +114,8 @@ private:
 	vk::Extent2D swapChainExtent;
 	bool isDeviceSuitable(vk::raii::PhysicalDevice const& physicalDevice);
 	void recordCommandBuffer(uint32_t imageIndex);
-	void transition_image_layout(uint32_t imageIndex, vk::ImageLayout old_layout, vk::ImageLayout new_layout, vk::AccessFlags2 src_access_mask, vk::AccessFlags2 dst_access_mask, vk::PipelineStageFlags2 src_stage_mask,
-		vk::PipelineStageFlags2 dst_stage_mask);
+	void transition_image_layout(vk::Image image, vk::ImageLayout old_layout, vk::ImageLayout new_layout, vk::AccessFlags2 src_access_mask, vk::AccessFlags2 dst_access_mask,
+		vk::PipelineStageFlags2 src_stage_mask,vk::PipelineStageFlags2 dst_stage_mask, vk::ImageAspectFlags  image_aspect_flags);
 	void transitionImageLayout(vk::raii::CommandBuffer& commandBuffer, const vk::raii::Image& image, vk::ImageLayout oldLayout, vk::ImageLayout newLayout);
 	void copyBufferToImage(vk::raii::CommandBuffer& commandBuffer, const vk::raii::Buffer& buffer, vk::raii::Image& image, uint32_t width, uint32_t height);
 	void updateUniformBuffer(uint32_t currentImage);
