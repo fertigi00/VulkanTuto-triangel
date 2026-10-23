@@ -170,6 +170,7 @@
     <None Include="shaders\slang.spv" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="textures\maxwelle.gif" />
     <Image Include="textures\texture.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

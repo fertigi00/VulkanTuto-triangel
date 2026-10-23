@@ -27,7 +27,9 @@ VSOutput vertMain(VSInput input) {
     return output;
 }
 
+Sampler3D texture;
+
 [shader("fragment")]
 float4 fragMain(VSOutput vertIn) : SV_TARGET {
-   return float4(vertIn.fragTexCoord, 0.0, 1.0);
+   return texture.Sample(vertIn.fragTexCoord);
 }

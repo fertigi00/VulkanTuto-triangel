@@ -65,5 +65,8 @@
     <Image Include="textures\texture.jpg">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="textures\maxwelle.gif">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

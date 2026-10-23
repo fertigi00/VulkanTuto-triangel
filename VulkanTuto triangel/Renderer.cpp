@@ -430,8 +430,8 @@ void Renderer::createCommandPool()
 
 void Renderer::createTextureImage()
 {
-	int            texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	int texWidth, texHeight, texChannels;
+	stbi_uc* pixels = stbi_load("textures/maxwelle.gif", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	vk::DeviceSize imageSize = texWidth * texHeight * 4;
 
 	if (!pixels)
