@@ -38,20 +38,20 @@ struct Vertex
 };
 // haute gauche // haute droite // basse droite  // basse gauche // cyan {0.0f, 1.0f, 1.0f}
 const std::vector<Vertex> vertices = {
-	{{ -0.5f, -0.5f, 0.5f }, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
-	{{0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+	{{ -0.5f, -0.5f, 0.5f }, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f} },
+	{{0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, /// good
 	{{0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-	{{-0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+	{{-0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
 
 	{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-	{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-	{{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+	{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}, //good
+	{{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
 	{{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
 
-	{{ -0.5f, -0.5f, 0.5f }, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f} },
-	{{0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-	{{0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-	{{-0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+	{{ -0.5f, -0.5f, 0.5f }, {1.0f, 0.0f, 0.0f}, {0.0f, 0.5f} },
+	{{0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.5f}},
+	{{0.5f, 0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.5f}},
+	{{-0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.5f}},
 
 	{{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
 	{{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
@@ -503,7 +503,7 @@ vk::Format Renderer::findDepthFormat()
 void Renderer::createTextureImage()
 {
 	int texWidth, texHeight, texChannels;
-	stbi_uc* pixels = stbi_load("textures/texture.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+	stbi_uc* pixels = stbi_load("textures/Maxwelle.jpg", &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 	vk::DeviceSize imageSize = texWidth * texHeight * 4;
 
 	if (!pixels)
