@@ -1,12 +1,12 @@
 Bonjour Voice le read me 
 
-si vous lancer le program un cube en 3D apparaitra sur une feunaitre Windows et tournera automatique ment avec une image de cu
-
 Vulkan Triangle
 1. Présentation du projet
-Ce projet a pour objectif de découvrir les bases de l'API graphique Vulkan à travers l'affichage d'un cube qui peux tourner dans une fenêtre.
+Ce projet est une application graphique développée en C++ avec l'API Vulkan. Il s'appuie sur les bases du tutoriel Vulkan consacré au rendu d'un triangle, puis les étend à l'affichage d'un cube texturé en rotation.
 
-L'application est développée en C++ et utilise des shaders pour exécuter les étapes programmables du pipeline graphique. Elle permet de comprendre les principales étapes nécessaires à la création d'un rendu avec Vulkan.
+L'objectif est de comprendre le fonctionnement du pipeline graphique Vulkan, la gestion des ressources GPU, le chargement des textures et la présentation des images à l'écran.
+
+Le rendu utilise un cube composé de sommets et d'indices, une texture chargée depuis un fichier image et des matrices de transformation mises à jour à chaque image.
 
 2. Fonctionnalités
 Initialisation de l'instance Vulkan.
