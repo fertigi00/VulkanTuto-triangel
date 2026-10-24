@@ -1,5 +1,22 @@
 Bonjour Voice le read me 
 
+Installation et lancement
+
+Extrayez tous les fichiers de l'archive ZIP.
+Vérifiez que les dossiers shaders et textures sont présents à côté de l'exécutable.
+Assurez-vous que votre système possède un pilote graphique compatible Vulkan.
+Si nécessaire, installez le Microsoft Visual C++ Redistributable adapté.
+Lancez Vulkan-Cube.exe.
+Configuration requise
+
+Windows x64
+GPU et pilote compatibles avec les fonctionnalités Vulkan requises par l'application
+Runtime Visual C++ compatible, si nécessaire
+Ressources utilisées
+
+shaders/slang.spv
+textures/Maxwelle.jpg
+
 Vulkan Triangle
 1. Présentation du projet
 Ce projet est une application graphique développée en C++ avec l'API Vulkan. Il s'appuie sur les bases du tutoriel Vulkan consacré au rendu d'un triangle, puis les étend à l'affichage d'un cube texturé en rotation.
