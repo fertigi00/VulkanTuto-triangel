@@ -154,7 +154,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="swap_chain.cpp" />
     <ClCompile Include="VulkanTuto triangel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,7 +161,6 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="swap_chain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\compile.bat" />

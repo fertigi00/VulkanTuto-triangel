@@ -219,29 +219,9 @@ void Renderer::CreateSurface()
 	}
 	surface = vk::raii::SurfaceKHR(instance, _surface);
 }
-
-/*std::vector<vk::QueueFamilyProperties> queueFamilyProperties = physicalDevice.getQueueFamilyProperties();
-
-	vk::Win32SurfaceCreateInfoKHR createInfo{.hinstance = GetModuleHandle(nullptr),
-		.hwnd      = glfwGetWin32Window(window)};
-	surface = instance.createWin32SurfaceKHR(createInfo);
-
-	uint32_t queueIndex = ~0;*/
-
 //shwapchaine 
 std::vector<const char*> Renderer::GetRequiredSwapchainExtension()
 {
-	//uint32_t glfwSwapchainExtensionCount = 0;
-	//auto glfwSwapchainExtensions = glfwGetRequiredInstanceExtensions(&glfwSwapchainExtensionCount);
-
-	//std::vector<char const*> requiredSwapchainExtensions = { vk::KHRSwapchainExtensionName,};
-
-	//std::vector extensionsw(glfwSwapchainExtensions, glfwSwapchainExtensions + glfwSwapchainExtensionCount);
-
-	//extensionsw.append_range(requiredSwapchainExtensions);
-
-	//return extensionsw;
-
 	std::vector<char const*> requiredSwapchainExtensions = { vk::KHRSwapchainExtensionName };
 	return requiredSwapchainExtensions;
 }
